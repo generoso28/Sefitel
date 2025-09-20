@@ -8,9 +8,7 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import os
-
 MODELO_ARQUIVO = 'modelo_snell.keras'
-
 def calcular_angulo_real(theta1_rad, n1, n2):
     argumento_arcsin = (n1 / n2) * np.sin(theta1_rad)
     if abs(argumento_arcsin) > 1:
@@ -18,7 +16,7 @@ def calcular_angulo_real(theta1_rad, n1, n2):
     return np.arcsin(argumento_arcsin)
 
 def desenhar_simulacao(n1, n2, theta1_rad, theta2_pred_rad, theta2_real_rad):
-    ax = plt.subplots(figsize=(8, 8))
+    fig, ax = plt.subplots(figsize=(8, 8))
     ax.set_aspect('equal', adjustable='box')
     ax.set_xlim(-1.5, 1.5)
     ax.set_ylim(-1.5, 1.5)

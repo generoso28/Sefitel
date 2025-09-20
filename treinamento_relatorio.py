@@ -11,13 +11,10 @@ import os
 import csv
 from datetime import datetime
 
-# --- 0. Definição de Nomes de Arquivos ---
 MODELO_ARQUIVO = 'modelo_snell.keras'
 DADOS_X_ARQUIVO = 'dados_X.npy'
 DADOS_Y_ARQUIVO = 'dados_y.npy'
 LOG_ARQUIVO = 'log_treinamento.csv'
-
-# --- 1. Funções Auxiliares ---
 
 def calcular_angulo_refracao(theta1, n1, n2):
     argumento_arcsin = (n1 / n2) * np.sin(theta1)
@@ -46,8 +43,6 @@ def registrar_log(num_amostras, history):
         writer.writerow(nova_linha)
     
     print(f"Resultados da sessão registrados em '{LOG_ARQUIVO}'.")
-
-# --- 2. Lógica Principal de Treinamento ---
 
 # Parâmetros
 num_novas_amostras = 2000

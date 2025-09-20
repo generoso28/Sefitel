@@ -9,24 +9,16 @@ from tensorflow.keras.models import load_model
 import matplotlib.pyplot as plt
 import os
 
-# --- 0. Definição de Nomes de Arquivos ---
 MODELO_ARQUIVO = 'modelo_snell.keras'
 
-# --- 1. Funções Auxiliares ---
-
 def calcular_angulo_real(theta1_rad, n1, n2):
-    """Calcula o ângulo de refração real usando a Lei de Snell."""
     argumento_arcsin = (n1 / n2) * np.sin(theta1_rad)
-    # Garante que o argumento esteja no intervalo [-1, 1] para evitar erros
-    # Isso lida com o caso de reflexão interna total
     if abs(argumento_arcsin) > 1:
         return None  # Indica reflexão interna total
     return np.arcsin(argumento_arcsin)
 
 def desenhar_simulacao(n1, n2, theta1_rad, theta2_pred_rad, theta2_real_rad):
-    """Gera uma imagem da simulação de refração."""
-    
-    fig, ax = plt.subplots(figsize=(8, 8))
+    ax = plt.subplots(figsize=(8, 8))
     ax.set_aspect('equal', adjustable='box')
     ax.set_xlim(-1.5, 1.5)
     ax.set_ylim(-1.5, 1.5)
@@ -91,26 +83,20 @@ def main():
             if not (0 <= theta1_input_graus <= 90):
                 print("Por favor, insira um ângulo entre 0 e 90 graus.")
                 continue
-            # Converte o ângulo para radianos para os cálculos
-            theta1_rad = np.radians(theta1_input_graus)
+            theta1_rad = np.radians(theta1_input_graus) # Converte para radianos
 
             # Prepara os dados para o modelo de IA
             input_ia = np.array([[theta1_rad, n2_input]])
-
-            # Faz a previsão com a IA
-            theta2_pred_rad = modelo.predict(input_ia)[0][0]  # pega o valor escalar
+            
+            theta2_pred_rad = modelo.predict(input_ia)[0][0]  # # Faz a previsão com a IA, obtendo o ângulo em escalar
             # Calcula o valor real
-            # O modelo espera um array numpy com formato (n_amostras, n_features)
-            # Neste caso, (1, 2) para uma única previsão com 2 features.
-            # As features são [angulo_incidencia_rad, indice_n2]
             theta2_real_rad = calcular_angulo_real(theta1_rad, n1_meio, n2_input)
 
             print("\n--- Resultados ---")
             print(f"Ângulo de Refração Real (calculado): {np.degrees(theta2_real_rad):.2f}°" if theta2_real_rad is not None else "Reflexão Interna Total (Real)")
             print(f"Ângulo de Refração Previsto (IA):   {np.degrees(theta2_pred_rad):.2f}°")
             
-            # Gera a imagem da simulação
-            desenhar_simulacao(n1_meio, n2_input, theta1_rad, theta2_pred_rad, theta2_real_rad)
+            desenhar_simulacao(n1_meio, n2_input, theta1_rad, theta2_pred_rad, theta2_real_rad) # Gera a imagem da simulação
 
         except ValueError:
             print("Entrada inválida. Por favor, digite apenas números.")
